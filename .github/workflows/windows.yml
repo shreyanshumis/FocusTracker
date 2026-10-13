@@ -1,0 +1,34 @@
+name: Windows build
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          architecture: x64
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: node --test tests/extension.test.cjs
+      - run: python tests/ui_smoke.py
+      - run: python build_app.py
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $compiler = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (!(Test-Path -LiteralPath $compiler)) { throw 'Inno Setup 6 is required on the runner.' }
+          & $compiler installer.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Installer compilation failed.' }
+      - run: python package_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FocusTracker-Windows
+          path: release/*
+          if-no-files-found: error

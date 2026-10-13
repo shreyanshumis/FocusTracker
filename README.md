@@ -38,3 +38,9 @@ FocusTracker supports **Windows 10 and 11 (64-bit)** and installs as a desktop a
 The included **Chrome and Edge browser companion** is required for YouTube prompts, blocking subdomains, and stopping already-open website tabs. Set it up in each browser you use. Without it, basic website blocking may require a browser restart and can be bypassed by some network settings.
 
 FocusTracker blocks websites, including browser games. It does not block installed applications.
+
+## Easy to install. Easy to remove.
+
+Run the Windows installer, approve the Windows permission prompt, and click **Install**. Leave **Launch FocusTracker** selected and click **Finish** to open the app. A desktop shortcut is selected by default, and the app is also available from Start. No Python installation or terminal commands are needed.
+
+To remove it, choose **FocusTracker > Uninstall** in Windows Settings, or use **Uninstall FocusTracker** in Start. The uninstaller asks the running app to close safely and removes its website-blocking rules before deleting the app. Saved preferences are kept if you reinstall. If you added the browser companion, remove it from your browser separately.
