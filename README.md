@@ -4,6 +4,16 @@
 
 FocusTracker is a simple website blocker for Windows that helps you stay focused while studying or working. Choose the websites that distract you, decide when to block them, and take a break when you need one.
 
+## Download
+
+**[Download FocusTracker for Windows](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.4/FocusTracker-Setup-1.3.4.exe)**
+
+Windows 10/11, 64-bit. Run the installer, then click **Finish** to open the app.
+
+[Portable ZIP](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.4/FocusTracker-1.3.4-Portable-Windows.zip) · [Release notes and checksums](https://github.com/shreyanshumis/FocusTracker/releases/tag/v1.3.4)
+
+The installer is currently unsigned. The browser companion needs a one-time setup for YouTube prompts and blocking already-open tabs.
+
 ## Your websites. Your choice.
 
 Start with an empty list and add only the websites you want to block. Enter a name like `reddit.com` or paste a full link like `https://www.reddit.com/`. FocusTracker treats both as the same website, rather than blocking just one page.

@@ -18,7 +18,7 @@ from core import (HostsFile, decision, domain,
                   load_config, next_transition, save_config, validate, hard_block_domains, is_youtube, browser_policy)
 from bridge import StatusBridge
 from branding import asset, VERSION
-from theme import BG, PANEL, EDGE, FG, MUTED, ACCENT, CYAN, NAVY, SOFT, RED, MotionButton, ProgressTrack
+from theme import BG, PANEL, EDGE, FG, MUTED, ACCENT, CYAN, NAVY, SOFT, RED, MotionButton, ProgressTrack, SelectionRail, SmoothScroll
 
 LIME = ACCENT
 BLUE = "#087CA6"
@@ -132,10 +132,15 @@ class App:
         self.label(sidebar, "FOCUSTRACKER", 12, PANEL, True).pack(anchor="w", padx=22, pady=(0, 5))
         self.label(sidebar, "Protect your attention.", 9, "#A8BAD4", wraplength=174, justify="left").pack(anchor="w", padx=22, pady=(0, 28))
         self.nav = {}
+        self.nav_area = tk.Frame(sidebar, bg=NAVY)
+        self.nav_area.pack(fill="x", padx=14)
+        self.selection = SelectionRail(self.nav_area, motion=lambda: not self.reduced_motion.get())
+        self.selection.place(x=0, y=0, width=6, relheight=1)
         for name in ("Overview", "Websites", "Schedules", "How it works"):
-            b = self.button(sidebar, name, lambda n=name: self.show_page(n), anchor="w")
-            b.pack(fill="x", padx=14, pady=4)
+            b = self.button(self.nav_area, name, lambda n=name: self.show_page(n), anchor="w")
+            b.pack(fill="x", padx=(12, 0), pady=4)
             self.nav[name] = b
+        self.nav_area.bind("<Configure>", lambda _: self.move_selection(False))
         bottom = tk.Frame(sidebar, bg=NAVY)
         bottom.pack(side="bottom", fill="x", padx=22, pady=25)
         self.label(bottom, "LOCAL & PRIVATE", 9, "#42C8F4", True).pack(anchor="w")
@@ -154,14 +159,15 @@ class App:
         viewport = tk.Frame(outer, bg=BG)
         viewport.pack(fill="both", expand=True)
         self.canvas = tk.Canvas(viewport, bg=BG, highlightthickness=0)
-        scroll = ttk.Scrollbar(viewport, command=self.canvas.yview)
+        self.scroller = SmoothScroll(self.canvas, motion=lambda: not self.reduced_motion.get())
+        scroll = ttk.Scrollbar(viewport, command=self.scroller.command)
         scroll.pack(side="right", fill="y")
         self.canvas.pack(side="left", fill="both", expand=True)
         self.canvas.configure(yscrollcommand=scroll.set)
         self.body = tk.Frame(self.canvas, bg=BG)
         content_id = self.canvas.create_window((0, 0), window=self.body, anchor="nw")
         self.content_id = content_id
-        self.body.bind("<Configure>", lambda _: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+        self.body.bind("<Configure>", lambda _: self.canvas.configure(scrollregion=(0, 0, self.canvas.winfo_width(), self.body.winfo_reqheight())))
         def resize(event):
             self.canvas.itemconfigure(content_id, width=event.width)
             if hasattr(self, "heading") and self.heading.winfo_exists():
@@ -169,12 +175,25 @@ class App:
         self.canvas.bind("<Configure>", resize)
         def wheel(event):
             if event.widget.winfo_toplevel() == self.root and not isinstance(event.widget, (tk.Listbox, ttk.Treeview)):
-                self.canvas.yview_scroll(-int(event.delta / 120), "units")
+                self.scroller.by(-event.delta / 120 * 90)
+                return "break"
         self.root.bind_all("<MouseWheel>", wheel, add="+")
         self.footer = self.label(outer, "", 9, MUTED, wraplength=740, justify="left")
         self.footer.pack(fill="x", pady=(14, 0))
 
+    def move_selection(self, animate=True):
+        button = self.nav.get(self.page)
+        if button and button.winfo_height() > 1:
+            self.selection.select(button.winfo_y(), button.winfo_height(), animate)
+
     def save_motion(self):
+        if self.reduced_motion.get():
+            self.scroller.stop()
+            self.move_selection(False)
+            if self.motion_job:
+                self.root.after_cancel(self.motion_job)
+                self.motion_job = None
+                self.canvas.coords(self.content_id, 0, 0)
         self.config["reduced_motion"] = self.reduced_motion.get()
         try:
             save_config(self.config_path, self.config)
@@ -182,6 +201,8 @@ class App:
             messagebox.showerror("Could not save preference", str(exc), parent=self.root)
 
     def show_page(self, page, animate=True):
+        previous = self.page
+        self.scroller.reset()
         if self.motion_job:
             self.root.after_cancel(self.motion_job)
             self.motion_job = None
@@ -190,17 +211,21 @@ class App:
             child.destroy()
         for name, button in self.nav.items():
             button.cancel()
-            button.configure(bg="#183C66" if name == page else NAVY, fg="#64D5FF" if name == page else "#C2D0E4")
-            button.rest_color = button.cget("bg")
+            button.configure(fg="#64D5FF" if name == page else "#C2D0E4")
+            button.rest_color = "#183C66" if name == page else NAVY
+            button.animate(button.rest_color)
+        self.move_selection(animate)
         getattr(self, {"Overview": "overview", "Websites": "websites", "Schedules": "schedules", "How it works": "help_page"}[page])()
         self.canvas.yview_moveto(0)
         self.refresh_status()
         self.canvas.coords(self.content_id, 0, 0)
         if animate and not self.reduced_motion.get():
             started = time.monotonic()
+            pages = list(self.nav)
+            direction = 1 if pages.index(page) >= pages.index(previous) else -1
             def enter():
-                t = min(1, (time.monotonic()-started)/.2)
-                self.canvas.coords(self.content_id, 0, 14*(1-t)**3)
+                t = min(1, (time.monotonic()-started)/.28)
+                self.canvas.coords(self.content_id, direction*22*(1-t)**3, 10*(1-t)**3)
                 self.motion_job = self.root.after(16, enter) if t < 1 else None
             enter()
 

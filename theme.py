@@ -38,7 +38,6 @@ class MotionButton(tk.Button):
             self.job = None
 
     def enter(self, _):
-        self.rest_color = self.cget("bg")
         self.animate(blend(self.rest_color, CYAN, .22))
 
     def leave(self, _):
@@ -55,6 +54,82 @@ class MotionButton(tk.Button):
             self.configure(bg=blend(source, target, 1-(1-t)**3))
             self.job = self.after(16, frame) if t < 1 else None
         frame()
+
+
+class SelectionRail(tk.Canvas):
+    """A single indicator that glides between native, keyboard-accessible buttons."""
+    def __init__(self, parent, motion=lambda: True):
+        super().__init__(parent, width=6, bg=NAVY, highlightthickness=0)
+        self.motion = motion
+        self.position = None
+        self.job = None
+        self.bind("<Destroy>", self.cancel)
+
+    def cancel(self, _=None):
+        if self.job:
+            self.after_cancel(self.job)
+            self.job = None
+
+    def select(self, top, height, animate=True):
+        self.cancel()
+        target = (float(top + 12), float(top + height - 12))
+        source = self.position or target
+        started = time.monotonic()
+        def frame():
+            t = min(1, (time.monotonic()-started)/.28) if animate and self.motion() else 1
+            eased = 1-(1-t)**3
+            self.position = tuple(a+(b-a)*eased for a, b in zip(source, target))
+            self.delete("all")
+            self.create_line(3, self.position[0], 3, self.position[1], width=6, fill="#163D61", capstyle="round")
+            self.create_line(3, self.position[0], 3, self.position[1], width=3, fill=CYAN, capstyle="round")
+            self.job = self.after(16, frame) if t < 1 else None
+        frame()
+
+
+class SmoothScroll:
+    """Pixel-based wheel scrolling with accumulated input and bounded easing."""
+    def __init__(self, canvas, motion=lambda: True):
+        self.canvas, self.motion = canvas, motion
+        self.target = 0
+        self.job = None
+        canvas.bind("<Destroy>", self.stop, add="+")
+
+    def stop(self, _=None):
+        if self.job:
+            self.canvas.after_cancel(self.job)
+            self.job = None
+
+    def extent(self):
+        region = self.canvas.cget("scrollregion").split()
+        total = float(region[3])-float(region[1]) if len(region) == 4 else 0
+        return max(1, total), max(0, total-self.canvas.winfo_height())
+
+    def reset(self):
+        self.stop()
+        self.target = 0
+        self.canvas.yview_moveto(0)
+
+    def by(self, pixels):
+        total, limit = self.extent()
+        current = self.canvas.yview()[0]*total
+        self.target = max(0, min(limit, (self.target if self.job else current)+pixels))
+        self.stop()
+        started = time.monotonic()
+        def frame():
+            total, limit = self.extent()
+            self.target = min(self.target, limit)
+            t = min(1, (time.monotonic()-started)/.24) if self.motion() else 1
+            position = current+(self.target-current)*(1-(1-t)**3)
+            self.canvas.yview_moveto(max(0, min(limit, position))/total)
+            self.job = self.canvas.after(16, frame) if t < 1 else None
+        frame()
+
+    def command(self, action, amount, unit=None):
+        if action == "moveto":
+            self.stop()
+            self.canvas.yview_moveto(float(amount))
+        else:
+            self.by(float(amount)*(self.canvas.winfo_height()*.85 if unit == "pages" else 50))
 
 
 class ProgressTrack(tk.Canvas):

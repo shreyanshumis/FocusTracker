@@ -54,10 +54,36 @@ with tempfile.TemporaryDirectory() as folder, patch.object(App, 'start_tray'):
         pump(root, .025)
     pump(root)
     assert app.duration.get() == '37', 'Duration must survive navigation'
+    app.show_page('How it works')
+    pump(root, .35)
+    app.scroller.by(160)
+    pump(root, .07)
+    halfway = app.canvas.yview()[0]
+    assert halfway > 0, 'Wheel scrolling must begin smoothly'
+    app.scroller.by(120)
+    pump(root, .35)
+    assert app.canvas.yview()[0] >= halfway
+    assert app.scroller.job is None, 'Scroll animation must settle'
+    app.scroller.by(-10000)
+    pump(root, .35)
+    assert app.canvas.yview()[0] == 0, 'Scrolling must stop at the top'
+    app.scroller.by(10000)
+    app.show_page('Websites')
+    pump(root, .35)
+    assert app.scroller.job is None and app.canvas.yview()[0] == 0
+    selected = app.nav['Websites']
+    assert abs(app.selection.position[0] - selected.winfo_y() - 12) < 1
+    assert app.selection.job is None, 'Selection slider must settle on the active tab'
     app.reduced_motion.set(True)
     app.save_motion()
     app.show_page('Websites')
     assert app.motion_job is None
+    assert app.selection.job is None
+    app.show_page('How it works')
+    pump(root, .1)
+    app.scroller.by(90)
+    assert app.scroller.job is None, 'Reduce motion must make scrolling immediate'
+    app.show_page('Websites')
     with patch('main.messagebox.askyesno', return_value=True):
         app.remove_all_domains()
     pump(root, .8)
