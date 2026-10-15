@@ -36,7 +36,7 @@ def browser_policy(config: dict, now: datetime) -> dict:
 def domain(value: str) -> str:
     value = value.strip().lower()
     if not value or any(c.isspace() for c in value) or "*" in value:
-        raise ValueError("Enter a website, such as youtube.com. Wildcards and spaces are not supported.")
+        raise ValueError("Enter a website, such as example.com. Wildcards and spaces are not supported.")
     parsed = urlsplit(value if "://" in value else "https://" + value)
     if parsed.scheme not in ("http", "https") or parsed.username or parsed.password or parsed.port:
         raise ValueError("Use a website address without a port or login details.")
@@ -53,7 +53,7 @@ def domain(value: str) -> str:
         raise ValueError("Enter a website name, not an IP address.")
     labels = name.split(".")
     if len(name) > 253 or len(labels) < 2 or any(not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", x) for x in labels):
-        raise ValueError("Enter a valid website name, such as reddit.com.")
+        raise ValueError("Enter a valid website name, such as example.com.")
     if name.endswith((".localhost", ".local", ".internal")):
         raise ValueError("Use a public website name, not a local network address.")
     return name[4:] if name.startswith("www.") else name

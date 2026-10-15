@@ -6,19 +6,19 @@ FocusTracker is a simple website blocker for Windows that helps you stay focused
 
 ## Download
 
-**[Download FocusTracker for Windows](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.5/FocusTracker-Setup-1.3.5.exe)**
+**[Download FocusTracker for Windows](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.6/FocusTracker-Setup-1.3.6.exe)**
 
 Windows 10/11, 64-bit. Run the installer, then click **Finish** to open the app.
 
-[Portable ZIP](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.5/FocusTracker-1.3.5-Portable-Windows.zip) · [Release notes and checksums](https://github.com/shreyanshumis/FocusTracker/releases/tag/v1.3.5)
+[Portable ZIP](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.6/FocusTracker-1.3.6-Portable-Windows.zip) · [Release notes and checksums](https://github.com/shreyanshumis/FocusTracker/releases/tag/v1.3.6)
 
 The installer is currently unsigned. Find companion setup under **How it works** in the app. The browser companion needs a one-time setup for YouTube prompts and blocking already-open tabs.
 
 ## Your websites. Your choice.
 
-Start with an empty list and add only the websites you want to block. Enter a name like `reddit.com` or paste a full link like `https://www.reddit.com/`. FocusTracker treats both as the same website, rather than blocking just one page.
+Start with an empty list and add only the websites you want to block. Enter a name like `example.com` or paste a full link like `https://www.example.com/`. FocusTracker treats both as the same website, rather than blocking just one page.
 
-Add or remove websites whenever you like. Nothing is selected for you.
+Add or remove websites whenever you like. There are no default blocked websites. The example addresses are placeholders only and are never added to your list.
 
 ## Focus on your schedule
 

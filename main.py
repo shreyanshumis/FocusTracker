@@ -290,7 +290,7 @@ class App:
         e.pack(side="left", fill="x", expand=True, ipady=9, padx=(0, 10))
         e.bind("<Return>", lambda _: self.add_domain())
         self.button(line, "Add website", self.add_domain, True).pack(side="right")
-        self.label(c, "Add reddit.com, www.reddit.com, or https://www.reddit.com/ - all block the same website.", 9, MUTED, wraplength=650, justify="left").pack(anchor="w", pady=(8, 17))
+        self.label(c, "Add example.com, www.example.com, or https://www.example.com/ - all block the same website.", 9, MUTED, wraplength=650, justify="left").pack(anchor="w", pady=(8, 17))
         area = tk.Frame(c, bg=PANEL)
         area.pack(fill="both", expand=True)
         self.site_list = tk.Listbox(area, bg=BG, fg=FG, selectbackground=EDGE,

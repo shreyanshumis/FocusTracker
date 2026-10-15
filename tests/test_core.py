@@ -11,6 +11,15 @@ from core import hard_block_domains, is_youtube, browser_policy
 
 
 class DomainTests(unittest.TestCase):
+    def test_empty_list_stays_empty_in_every_blocking_mode(self):
+        for mode in ("auto", "blocked", "open"):
+            c = defaults()
+            c["mode"] = mode
+            policy = browser_policy(c, datetime.now())
+            self.assertEqual(policy["blockedDomains"], [])
+            self.assertFalse(policy["youtubePrompt"])
+            self.assertEqual(expand_domains(c["domains"]), [])
+
     def test_new_list_empty_and_user_links_cover_whole_site(self):
         c = defaults()
         self.assertEqual(c["domains"], [])

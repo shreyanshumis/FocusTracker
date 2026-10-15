@@ -1,5 +1,5 @@
 #define AppName "FocusTracker"
-#define AppVersion "1.3.5"
+#define AppVersion "1.3.6"
 
 [Setup]
 AppId={{17F788B9-ED51-4C8C-966E-AF5105B12560}
@@ -11,7 +11,7 @@ DefaultGroupName=FocusTracker
 DisableProgramGroupPage=yes
 DisableDirPage=yes
 OutputDir=installer-output
-OutputBaseFilename=FocusTracker-Setup-1.3.5
+OutputBaseFilename=FocusTracker-Setup-1.3.6
 SetupIconFile=build\focus.ico
 UninstallDisplayIcon={app}\FocusTracker.exe
 ArchitecturesAllowed=x64compatible
@@ -25,7 +25,7 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 WizardSizePercent=110
-VersionInfoVersion=1.3.5.0
+VersionInfoVersion=1.3.6.0
 VersionInfoDescription=FocusTracker Windows Setup
 UninstallDisplayName=FocusTracker
 

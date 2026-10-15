@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 
-VERSION = "1.3.5"
+VERSION = "1.3.6"
 
 
 def asset(name):
