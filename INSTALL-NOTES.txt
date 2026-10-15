@@ -17,7 +17,7 @@ website access and exits. Automatic startup is not enabled.
 BROWSER COMPANION - ONE-TIME SETUP
 The app opens without a browser extension. For YouTube study prompts and
 blocking already-open tabs and subdomains, install the included companion:
-1. Open Browser companion folder from the FocusTracker Start menu folder.
+1. In FocusTracker, open How it works and click Browser companion folder.
 2. Open chrome://extensions in Chrome or edge://extensions in Edge.
 3. Enable Developer mode, choose Load unpacked, and select that folder.
 Repeat in each browser/profile. Reload the companion after app updates.
@@ -25,10 +25,11 @@ The app footer reports when a companion is connected. Firefox is unsupported.
 
 UNINSTALL
 In Windows Settings, find FocusTracker under Apps and select Uninstall.
-Alternatively use Uninstall FocusTracker in Start.
+Only the main FocusTracker shortcut is added to Start.
 The uninstaller asks the app to close safely, restores website access, and
 removes the installed files and shortcuts. If cleanup fails, it keeps the app
-installed so you can use Recover blocked websites and retry.
+installed so you can run Recover websites.cmd from the installation folder
+and retry.
 Remove the browser companion separately from your browser's Extensions page.
 Preferences remain in %LOCALAPPDATA%\FocusHarbor for future reinstalls.
 Delete that folder after uninstall if you also want to erase saved preferences.

@@ -332,6 +332,10 @@ class App:
         self.title("A quieter browser, on your terms.", "A personal focus tool for Windows. You stay in control.")
         c = self.card(self.body)
         c.pack(fill="both", expand=True)
+        actions = tk.Frame(c, bg=PANEL)
+        actions.pack(fill="x", pady=(0, 18))
+        self.button(actions, "Browser companion folder", lambda: self.open_support("youtube-extension"), True).pack(side="left", padx=(0, 8))
+        self.button(actions, "Setup instructions", lambda: self.open_support("INSTALL-NOTES.txt")).pack(side="left")
         for title, detail in [
             ("Browser companion · Chrome / Edge", "Load the youtube-extension folder using Extensions → Developer mode → Load unpacked. It blocks listed websites and replaces already-open tabs, usually within 30 seconds. Reload it after app upgrades. YouTube asks: Are you sure it’s about studies? Install separately in every browser you use."),
             ("01   Pick sites, then pick your time", "Your list starts empty. Add any website address; the URL path is ignored. Use a countdown, a weekly schedule, or the manual block and unblock buttons."),
@@ -342,6 +346,13 @@ class App:
             self.label(c, title, 13, LIME, True).pack(anchor="w", pady=(4, 7))
             self.label(c, detail, 10, MUTED, wraplength=660, justify="left").pack(anchor="w", pady=(0, 17))
         self.label(c, "Administrator access is used only for local website rules. No browsing history is collected.", 10, BLUE, wraplength=660, justify="left").pack(anchor="w")
+
+    def open_support(self, name):
+        base = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
+        try:
+            os.startfile(base / name)
+        except OSError as exc:
+            messagebox.showerror("Could not open help", str(exc), parent=self.root)
 
     def change(self, update):
         if self.exit_requested:

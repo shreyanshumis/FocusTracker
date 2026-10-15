@@ -6,13 +6,13 @@ FocusTracker is a simple website blocker for Windows that helps you stay focused
 
 ## Download
 
-**[Download FocusTracker for Windows](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.4/FocusTracker-Setup-1.3.4.exe)**
+**[Download FocusTracker for Windows](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.5/FocusTracker-Setup-1.3.5.exe)**
 
 Windows 10/11, 64-bit. Run the installer, then click **Finish** to open the app.
 
-[Portable ZIP](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.4/FocusTracker-1.3.4-Portable-Windows.zip) · [Release notes and checksums](https://github.com/shreyanshumis/FocusTracker/releases/tag/v1.3.4)
+[Portable ZIP](https://github.com/shreyanshumis/FocusTracker/releases/download/v1.3.5/FocusTracker-1.3.5-Portable-Windows.zip) · [Release notes and checksums](https://github.com/shreyanshumis/FocusTracker/releases/tag/v1.3.5)
 
-The installer is currently unsigned. The browser companion needs a one-time setup for YouTube prompts and blocking already-open tabs.
+The installer is currently unsigned. Find companion setup under **How it works** in the app. The browser companion needs a one-time setup for YouTube prompts and blocking already-open tabs.
 
 ## Your websites. Your choice.
 
@@ -53,4 +53,4 @@ FocusTracker blocks websites, including browser games. It does not block install
 
 Run the Windows installer, approve the Windows permission prompt, and click **Install**. Leave **Launch FocusTracker** selected and click **Finish** to open the app. A desktop shortcut is selected by default, and the app is also available from Start. No Python installation or terminal commands are needed.
 
-To remove it, choose **FocusTracker > Uninstall** in Windows Settings, or use **Uninstall FocusTracker** in Start. The uninstaller asks the running app to close safely and removes its website-blocking rules before deleting the app. Saved preferences are kept if you reinstall. If you added the browser companion, remove it from your browser separately.
+To remove it, choose **FocusTracker > Uninstall** in Windows Settings. The uninstaller asks the running app to close safely and removes its website-blocking rules before deleting the app. Saved preferences are kept if you reinstall. If you added the browser companion, remove it from your browser separately.
