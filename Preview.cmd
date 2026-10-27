@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0FocusTracker.exe" --demo
+start "" "%~dp0Blacklist.exe" --demo

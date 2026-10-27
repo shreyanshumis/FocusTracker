@@ -29,6 +29,6 @@ jobs:
       - run: python package_release.py
       - uses: actions/upload-artifact@v4
         with:
-          name: FocusTracker-Windows
+          name: Blacklist-Windows
           path: release/*
           if-no-files-found: error

@@ -1,8 +1,8 @@
-FOCUSTRACKER - QUICK START
+BLACKLIST - QUICK START
 
 INSTALL AND OPEN
 Run the installer, approve the Windows permission prompt, and click Install.
-On the final screen, leave Launch FocusTracker selected and click Finish.
+On the final screen, leave Launch Blacklist selected and click Finish.
 A desktop shortcut is selected by default. You can also open it from Start.
 Python and other runtime files are bundled. No commands are needed.
 Later launches may ask for administrator permission for website blocking.
@@ -17,15 +17,15 @@ website access and exits. Automatic startup is not enabled.
 BROWSER COMPANION - ONE-TIME SETUP
 The app opens without a browser extension. For YouTube study prompts and
 blocking already-open tabs and subdomains, install the included companion:
-1. In FocusTracker, open How it works and click Browser companion folder.
+1. In Blacklist, open How it works and click Browser companion folder.
 2. Open chrome://extensions in Chrome or edge://extensions in Edge.
 3. Enable Developer mode, choose Load unpacked, and select that folder.
 Repeat in each browser/profile. Reload the companion after app updates.
 The app footer reports when a companion is connected. Firefox is unsupported.
 
 UNINSTALL
-In Windows Settings, find FocusTracker under Apps and select Uninstall.
-Only the main FocusTracker shortcut is added to Start.
+In Windows Settings, find Blacklist under Apps and select Uninstall.
+Only the main Blacklist shortcut is added to Start.
 The uninstaller asks the app to close safely, restores website access, and
 removes the installed files and shortcuts. If cleanup fails, it keeps the app
 installed so you can run Recover websites.cmd from the installation folder

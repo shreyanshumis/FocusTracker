@@ -2,16 +2,16 @@
 import time
 import tkinter as tk
 
-BG = "#F3F7FD"
-PANEL = "#FFFFFF"
-EDGE = "#DFE8F5"
-FG = "#111E32"
-MUTED = "#526581"
-ACCENT = "#0877F9"
-CYAN = "#08B9E9"
-NAVY = "#101C2F"
-SOFT = "#EAF3FF"
-RED = "#BF3549"
+BG = "#191919"
+PANEL = "#242424"
+EDGE = "#3C3C3C"
+FG = "#F3F0E7"
+MUTED = "#B5B3AC"
+ACCENT = "#F5CD47"
+CYAN = "#FFE27B"
+NAVY = "#141414"
+SOFT = "#333126"
+RED = "#FF8585"
 
 
 def blend(a, b, amount):
@@ -80,7 +80,7 @@ class SelectionRail(tk.Canvas):
             eased = 1-(1-t)**3
             self.position = tuple(a+(b-a)*eased for a, b in zip(source, target))
             self.delete("all")
-            self.create_line(3, self.position[0], 3, self.position[1], width=6, fill="#163D61", capstyle="round")
+            self.create_line(3, self.position[0], 3, self.position[1], width=6, fill="#5B4C21", capstyle="round")
             self.create_line(3, self.position[0], 3, self.position[1], width=3, fill=CYAN, capstyle="round")
             self.job = self.after(16, frame) if t < 1 else None
         frame()

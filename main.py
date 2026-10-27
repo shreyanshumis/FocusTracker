@@ -17,11 +17,11 @@ from tkinter import messagebox, ttk
 from core import (HostsFile, decision, domain,
                   load_config, next_transition, save_config, validate, hard_block_domains, is_youtube, browser_policy)
 from bridge import StatusBridge
-from branding import asset, VERSION
+from branding import application_icon, VERSION
 from theme import BG, PANEL, EDGE, FG, MUTED, ACCENT, CYAN, NAVY, SOFT, RED, MotionButton, ProgressTrack, SelectionRail, SmoothScroll
 
 LIME = ACCENT
-BLUE = "#087CA6"
+BLUE = ACCENT
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 
@@ -71,19 +71,14 @@ class App:
             except OSError:
                 self.bridge_error = "Browser companion connection unavailable. Only Windows hosts rules can be applied."
         self.page = "Overview"
-        root.title("FocusTracker" + (" — Preview" if demo else ""))
+        root.title("Blacklist" + (" — Preview" if demo else ""))
         root.geometry("1120x850")
         root.minsize(1000, 720)
         root.configure(bg=BG)
         root.protocol("WM_DELETE_WINDOW", self.close)
-        self.logo = None
-        if asset("logo.png").exists():
-            from PIL import Image, ImageTk
-            original = Image.open(asset("logo.png")).convert("RGBA")
-            self.window_icon = ImageTk.PhotoImage(original.resize((128, 128), Image.Resampling.LANCZOS))
-            root.iconphoto(True, self.window_icon)
-            original.thumbnail((160, 130), Image.Resampling.LANCZOS)
-            self.logo = ImageTk.PhotoImage(original)
+        from PIL import ImageTk
+        self.window_icon = ImageTk.PhotoImage(application_icon(128))
+        root.iconphoto(True, self.window_icon)
         self.style()
         self.layout()
         self.show_page("Overview")
@@ -107,7 +102,7 @@ class App:
 
     def button(self, parent, text, action, primary=False, **kw):
         return MotionButton(parent, text=text, command=action, bg=ACCENT if primary else SOFT,
-                         fg=PANEL if primary else FG, activebackground=CYAN,
+                         fg=NAVY if primary else FG, activebackground=CYAN,
                          activeforeground=NAVY, relief="flat", borderwidth=0,
                          motion=lambda: not self.reduced_motion.get(), takefocus=True,
                          highlightthickness=2, highlightbackground=parent["bg"], highlightcolor=ACCENT,
@@ -126,11 +121,8 @@ class App:
         sidebar = tk.Frame(self.root, bg=NAVY, width=218)
         sidebar.pack(side="left", fill="y")
         sidebar.pack_propagate(False)
-        if self.logo:
-            tile = tk.Label(sidebar, image=self.logo, bg=PANEL, padx=5, pady=5)
-            tile.pack(padx=24, pady=(26, 17))
-        self.label(sidebar, "FOCUSTRACKER", 12, PANEL, True).pack(anchor="w", padx=22, pady=(0, 5))
-        self.label(sidebar, "Protect your attention.", 9, "#A8BAD4", wraplength=174, justify="left").pack(anchor="w", padx=22, pady=(0, 28))
+        self.label(sidebar, "BLACKLIST", 18, ACCENT, True).pack(anchor="w", padx=22, pady=(32, 8))
+        self.label(sidebar, "Protect your attention.", 9, MUTED, wraplength=174, justify="left").pack(anchor="w", padx=22, pady=(0, 28))
         self.nav = {}
         self.nav_area = tk.Frame(sidebar, bg=NAVY)
         self.nav_area.pack(fill="x", padx=14)
@@ -143,11 +135,11 @@ class App:
         self.nav_area.bind("<Configure>", lambda _: self.move_selection(False))
         bottom = tk.Frame(sidebar, bg=NAVY)
         bottom.pack(side="bottom", fill="x", padx=22, pady=25)
-        self.label(bottom, "LOCAL & PRIVATE", 9, "#42C8F4", True).pack(anchor="w")
-        self.label(bottom, "No account. No browsing log.\nWindows 10 / 11 · " + VERSION, 9, "#A8BAD4", justify="left", wraplength=174).pack(anchor="w", pady=(8, 14))
+        self.label(bottom, "LOCAL & PRIVATE", 9, ACCENT, True).pack(anchor="w")
+        self.label(bottom, "No account. No browsing log.\nWindows 10 / 11 · " + VERSION, 9, MUTED, justify="left", wraplength=174).pack(anchor="w", pady=(8, 14))
         tk.Checkbutton(bottom, text="Reduce motion", variable=self.reduced_motion, command=self.save_motion,
-                       bg=NAVY, fg="#A8BAD4", selectcolor=NAVY, activebackground=NAVY,
-                       activeforeground=PANEL, relief="flat").pack(anchor="w", pady=(0, 14))
+                       bg=NAVY, fg=MUTED, selectcolor=NAVY, activebackground=NAVY,
+                       activeforeground=FG, relief="flat").pack(anchor="w", pady=(0, 14))
         self.button(bottom, "Unblock & quit", self.quit).pack(fill="x")
         outer = tk.Frame(self.root, bg=BG)
         outer.pack(side="left", fill="both", expand=True, padx=32, pady=25)
@@ -211,8 +203,8 @@ class App:
             child.destroy()
         for name, button in self.nav.items():
             button.cancel()
-            button.configure(fg="#64D5FF" if name == page else "#C2D0E4")
-            button.rest_color = "#183C66" if name == page else NAVY
+            button.configure(fg=ACCENT if name == page else MUTED)
+            button.rest_color = SOFT if name == page else NAVY
             button.animate(button.rest_color)
         self.move_selection(animate)
         getattr(self, {"Overview": "overview", "Websites": "websites", "Schedules": "schedules", "How it works": "help_page"}[page])()
@@ -339,7 +331,7 @@ class App:
         for title, detail in [
             ("Browser companion · Chrome / Edge", "Load the youtube-extension folder using Extensions → Developer mode → Load unpacked. It blocks listed websites and replaces already-open tabs, usually within 30 seconds. Reload it after app upgrades. YouTube asks: Are you sure it’s about studies? Install separately in every browser you use."),
             ("01   Pick sites, then pick your time", "Your list starts empty. Add any website address; the URL path is ignored. Use a countdown, a weekly schedule, or the manual block and unblock buttons."),
-            ("02   Keep FocusTracker running", "Closing the window minimizes it to the system tray. Schedules and timer expiry need the app running. After sleep, the app catches up with the current time. Reopen it after signing in; this version does not start automatically."),
+            ("02   Keep Blacklist running", "Closing the window minimizes it to the system tray. Schedules and timer expiry need the app running. After sleep, the app catches up with the current time. Reopen it after signing in; this version does not start automatically."),
             ("03   Know what gets blocked", "Windows hosts rules affect browsers using normal Windows name resolution. Hosts rules do not support wildcards. Restart browsers after changes if a page still loads. VPNs, proxies, custom DNS, cached sessions, and unlisted subdomains can bypass blocking."),
             ("04   Leave whenever you need", "Unblock now overrides schedules until you select Use schedules again. Unblock & quit removes this app’s hosts rules. If the app crashes, rules can remain: reopen it and unblock, or use the recovery launcher supplied with the app."),
         ]:
@@ -512,7 +504,7 @@ class App:
             text = "Browser companion not connected. Install/reload it in each browser to stop already-open sites. Windows rules alone may need a full browser restart."
         self.footer.configure(text=self.error or self.bridge_error or self.cache_note or text, fg=RED if self.error else MUTED)
         if self.tray:
-            self.tray.title = "FocusTracker — " + title
+            self.tray.title = "Blacklist — " + title
 
     def apply_async(self, entries, signature):
         self.busy = True
@@ -576,11 +568,9 @@ class App:
         def tray_worker():
             try:
                 import pystray
-                from PIL import Image
-                image = Image.open(asset("logo.png")).convert("RGBA")
-                image.thumbnail((64, 64), Image.Resampling.LANCZOS)
-                self.tray = pystray.Icon("FocusHarbor", image, "FocusTracker", pystray.Menu(
-                    pystray.MenuItem("Open FocusTracker", lambda: self.actions.put(("show", None)), default=True),
+                image = application_icon()
+                self.tray = pystray.Icon("FocusHarbor", image, "Blacklist", pystray.Menu(
+                    pystray.MenuItem("Open Blacklist", lambda: self.actions.put(("show", None)), default=True),
                     pystray.MenuItem("Unblock now", lambda: self.actions.put(("unblock", None))),
                     pystray.MenuItem("Unblock & quit", lambda: self.actions.put(("quit", None)))))
                 def ready(icon):
@@ -594,7 +584,7 @@ class App:
     def close(self):
         if self.tray_ready:
             self.root.withdraw()
-        elif messagebox.askyesno("Exit FocusTracker?", "The tray icon is unavailable. Unblock websites and quit?", parent=self.root):
+        elif messagebox.askyesno("Exit Blacklist?", "The tray icon is unavailable. Unblock websites and quit?", parent=self.root):
             self.quit()
 
     def quit(self):
@@ -626,14 +616,14 @@ def main():
     demo = "--demo" in sys.argv
     recover = "--unblock" in sys.argv
     if os.name != "nt" and not demo:
-        raise SystemExit("FocusTracker requires Windows.")
+        raise SystemExit("Blacklist requires Windows.")
     if not demo and not ctypes.windll.shell32.IsUserAnAdmin():
         command = app_command(*sys.argv[1:])
         result = ctypes.windll.shell32.ShellExecuteW(None, "runas", command[0], subprocess.list2cmdline(command[1:]), None, 1)
         if result <= 32:
             root = tk.Tk()
             root.withdraw()
-            messagebox.showerror("Administrator permission needed", "FocusTracker needs administrator permission to update Windows website rules. Nothing was changed.")
+            messagebox.showerror("Administrator permission needed", "Blacklist needs administrator permission to update Windows website rules. Nothing was changed.")
             root.destroy()
         return
     mutex = None
@@ -652,7 +642,7 @@ def main():
                 return
             root = tk.Tk()
             root.withdraw()
-            messagebox.showinfo("FocusTracker is already running", "Use the eye icon in the system tray to open it or unblock websites.")
+            messagebox.showinfo("Blacklist is already running", "Use the list icon in the system tray to open it or unblock websites.")
             root.destroy()
             return
     temp = tempfile.TemporaryDirectory(prefix="focustracker-preview-") if demo else None
@@ -678,7 +668,7 @@ def main():
                     save_config(config_path, config)
                 except ValueError:
                     pass  # Preserve corrupt settings; hosts recovery still succeeds.
-            messagebox.showinfo("Websites unblocked", "FocusTracker’s website rules have been removed.")
+            messagebox.showinfo("Websites unblocked", "Blacklist’s website rules have been removed.")
             root.destroy()
         else:
             if os.name == "nt":
@@ -688,7 +678,7 @@ def main():
             root.deiconify()
             root.mainloop()
     except Exception as exc:
-        messagebox.showerror("FocusTracker could not start", f"{exc}\n\nIf sites remain blocked, run Recover websites.cmd.")
+        messagebox.showerror("Blacklist could not start", f"{exc}\n\nIf sites remain blocked, run Recover websites.cmd.")
         root.destroy()
     finally:
         if signals:

@@ -1,2 +1,2 @@
 @echo off
-start "" "%~dp0FocusTracker.exe" --unblock
+start "" "%~dp0Blacklist.exe" --unblock

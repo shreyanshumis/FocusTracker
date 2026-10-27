@@ -11,7 +11,7 @@ FILES = ["main.py", "core.py", "bridge.py", "theme.py", "branding.py",
          "requirements.txt", "README.md", "INSTALL-NOTES.txt", "LICENSE",
          "THIRD-PARTY-NOTICES.md", "CONTRIBUTING.md", ".gitignore", ".gitattributes",
          "Preview.cmd", "Recover websites.cmd"]
-FOLDERS = ["assets", "tests", "youtube-extension", ".github"]
+FOLDERS = ["tests", "youtube-extension", ".github"]
 
 def archive(target, files, base, prefix=""):
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as bundle:
@@ -27,18 +27,18 @@ if __name__ == "__main__":
     for path in [ROOT / name for name in FILES]:
         if not path.is_file():
             raise SystemExit(f"Missing source file: {path.name}")
-    archive(OUTPUT / f"FocusTracker-{VERSION}-Source.zip", source, ROOT, "FocusTracker/")
+    archive(OUTPUT / f"Blacklist-{VERSION}-Source.zip", source, ROOT, "Blacklist/")
     portable = ROOT / "dist-study"
-    if not (portable / "FocusTracker.exe").is_file():
+    if not (portable / "Blacklist.exe").is_file():
         raise SystemExit("Run build_app.py first.")
-    archive(OUTPUT / f"FocusTracker-{VERSION}-Portable-Windows.zip", portable.rglob("*"), portable)
+    archive(OUTPUT / f"Blacklist-{VERSION}-Portable-Windows.zip", portable.rglob("*"), portable)
     import shutil
-    setup = ROOT / "installer-output" / f"FocusTracker-Setup-{VERSION}.exe"
+    setup = ROOT / "installer-output" / f"Blacklist-Setup-{VERSION}.exe"
     if not setup.is_file():
         raise SystemExit("Compile installer.iss first.")
     shutil.copy2(setup, OUTPUT / setup.name)
-    artifacts = [OUTPUT / setup.name, OUTPUT / f"FocusTracker-{VERSION}-Source.zip",
-                 OUTPUT / f"FocusTracker-{VERSION}-Portable-Windows.zip"]
+    artifacts = [OUTPUT / setup.name, OUTPUT / f"Blacklist-{VERSION}-Source.zip",
+                 OUTPUT / f"Blacklist-{VERSION}-Portable-Windows.zip"]
     (OUTPUT / "SHA256SUMS.txt").write_text("".join(
         f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in artifacts), encoding="utf-8")
     print("Release files:", OUTPUT)

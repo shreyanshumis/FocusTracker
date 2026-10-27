@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "FocusTracker - Website blocker & study check",
-  "version": "1.3.6",
+  "name": "Blacklist - Website blocker & study check",
+  "version": "1.4.0",
   "description": "Block your focus-time websites, including open tabs, and pause before YouTube.",
   "minimum_chrome_version": "120",
   "permissions": [
